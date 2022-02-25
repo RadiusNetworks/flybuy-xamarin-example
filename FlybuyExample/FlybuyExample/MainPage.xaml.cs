@@ -10,11 +10,19 @@ namespace FlybuyExample
 {
     public partial class MainPage : ContentPage
     {
+        Customer customer;
+
         public MainPage()
         {
             InitializeComponent();
             // This is optional, but provides better layout for the iPhone X 
             On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUseSafeArea(true);
+
+            var flybuyService = DependencyService.Get<IFlybuyService>();
+            if (flybuyService != null)
+            {
+                customer = flybuyService.CurrentCustomer();
+            }
         }
 
         int count = 0;

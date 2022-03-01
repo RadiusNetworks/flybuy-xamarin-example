@@ -6,7 +6,9 @@ namespace FlybuyExample
     {
         Customer CurrentCustomer();
 
-        Customer CreateCustomer(string name, string carType, string carColor, string carLicense, string phone);
+        void CreateCustomer(Customer customer);
+
+        void UpdateCustomer(Customer customer);
 
         Order[] GetOrders();
 

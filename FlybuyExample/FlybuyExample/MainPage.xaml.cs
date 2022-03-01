@@ -10,7 +10,7 @@ namespace FlybuyExample
 {
     public partial class MainPage : ContentPage
     {
-        Customer customer;
+        public Customer Customer { get; set; }
 
         public MainPage()
         {
@@ -18,18 +18,34 @@ namespace FlybuyExample
             // This is optional, but provides better layout for the iPhone X 
             On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUseSafeArea(true);
 
-            var flybuyService = DependencyService.Get<IFlybuyService>();
-            if (flybuyService != null)
+            var FlybuyService = DependencyService.Get<IFlybuyService>();
+            if (FlybuyService != null)
             {
-                customer = flybuyService.CurrentCustomer();
+                Customer = FlybuyService.CurrentCustomer();
             }
+
+            if (null == Customer)
+            {
+                Customer = new Customer();
+            }
+
+            BindingContext = this;
         }
 
-        int count = 0;
         private void Button_Clicked(object sender, EventArgs e)
         {
-            count++;
-            ((Button)sender).Text = $"You clicked {count} times.";
+            var FlybuyService = DependencyService.Get<IFlybuyService>();
+            if (FlybuyService != null)
+            {
+                if (Customer.Token != null)
+                {
+                    FlybuyService.UpdateCustomer(Customer);
+                } else
+                {
+                    FlybuyService.CreateCustomer(Customer);
+                }
+            }
+            //((Button)sender).Text = $"You clicked {count} times.";
         }
     }
 }

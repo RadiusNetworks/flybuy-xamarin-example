@@ -1,16 +1,70 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:FlybuyExample"
              x:Class="FlybuyExample.MainPage">
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-
-        <Button Text="Click me" Clicked="Button_Clicked" />
-    </StackLayout>
+    <xct:TabView TabStripPlacement="Top">
+        <xct:TabViewItem Text="Redeem" BackgroundColor="#67aacf" TextColor="#ddfefe" TextColorSelected="#67aacf">
+            <xct:TabViewItem.Content>
+                <StackLayout>
+                    <Frame BackgroundColor="#67aacf" Padding="24">
+                    <Label Text="Redeem Order"
+                        FontSize="24"
+                        TextColor="#ddfefe"
+                        HorizontalOptions="Center"
+                        VerticalOptions="CenterAndExpand" />
+                    <!-- 
+                    <Button Text="Click me" Clicked="Button_Clicked" />
+                    -->
+                    </Frame>
+                </StackLayout>
+            </xct:TabViewItem.Content>
+        </xct:TabViewItem>
+        <xct:TabViewItem Text="Create" BackgroundColor="#5681b6" TextColor="#d4eafd" TextColorSelected="#5681b6">
+            <xct:TabViewItem.Content>
+                <StackLayout>
+                    <Frame BackgroundColor="#5681b6" Padding="24">
+                    <Label Text="Create Order"
+                        FontSize="24"
+                        TextColor="#d4eafd"
+                        HorizontalOptions="Center"
+                        VerticalOptions="CenterAndExpand" />
+                    <!-- 
+                    <Button Text="Click me" Clicked="Button_Clicked" />
+                    -->
+                    </Frame>
+                </StackLayout>
+            </xct:TabViewItem.Content>
+        </xct:TabViewItem>
+        <xct:TabViewItem Text="Customer" BackgroundColor="#605597" TextColor="#d0d0fb" TextColorSelected="#605597">
+            <xct:TabViewItem.Content>
+                <StackLayout>
+                    <Frame BackgroundColor="#605597" Padding="24">
+                    <Label Text="Customer Details"
+                        FontSize="24"
+                        TextColor="#d0d0fb"
+                        HorizontalOptions="Center"
+                        VerticalOptions="CenterAndExpand" />
+                    </Frame>
+                    <TableView Intent="Settings">
+                        <TableRoot>
+                            <TableSection Title="Basic Info" TextColor="Black">
+                                <EntryCell Text="{Binding Customer.Name}" Placeholder="Name" />
+                                <EntryCell Text="{Binding Customer.Phone}" Placeholder="Phone" />
+                            </TableSection>
+                            <TableSection Title="Car Details" TextColor="Black">
+                                <EntryCell Text="{Binding Customer.CarType}" Placeholder="Make Model" />
+                                <EntryCell Text="{Binding Customer.CarColor}" Placeholder="Color" />
+                                <EntryCell Text="{Binding Customer.CarLicense}" Placeholder="License" />
+                            </TableSection>
+                        </TableRoot>
+                    </TableView>
+                    <Button Text="Update" Clicked="Button_Clicked" />
+                </StackLayout>
+            </xct:TabViewItem.Content>
+        </xct:TabViewItem>
+    </xct:TabView>
 
 </ContentPage>

@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 
 using FlyBuy;
+using FlyBuy.Pickup;
 
 namespace FlybuyExample.Droid
 {
@@ -18,12 +19,15 @@ namespace FlybuyExample.Droid
         {
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            LoadApplication(new App());
 
             string appToken = "426.otMfWCDb4vsYKyZZtociLpJs";
 
             Core.Configure(this, appToken);
-            ((FlyBuy.Pickup.PickupManager)FlyBuy.Pickup.PickupManager.Manager.GetInstance(null)).Configure(this);
+
+            var Pickup = PickupManager.Manager.GetInstance(null) as PickupManager;
+            Pickup.Configure(this);
+
+            LoadApplication(new App());
         }
     }
 }

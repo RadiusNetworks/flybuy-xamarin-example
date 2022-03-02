@@ -4,23 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+using DatePicker = Xamarin.Forms.DatePicker;
 
 namespace FlybuyExample
 {
     public partial class MainPage : ContentPage
     {
         public Customer Customer { get; set; }
+        public Order Order { get; set; }
+        public IList<Site> Sites { get; set; }
+        public Site Site { get; set; }
+        public IList<string> PickupTypes { get; }
 
         public MainPage()
         {
             InitializeComponent();
-            // This is optional, but provides better layout for the iPhone X 
-            On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUseSafeArea(true);
 
             var FlybuyService = DependencyService.Get<IFlybuyService>();
             if (FlybuyService != null)
             {
+                Sites = FlybuyService.GetSites();
                 Customer = FlybuyService.CurrentCustomer();
             }
 
@@ -29,10 +32,24 @@ namespace FlybuyExample
                 Customer = new Customer();
             }
 
+            Order = new Order();
+            PickupTypes = new List<string> { "pickup", "curbside" };
+
             BindingContext = this;
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private void Create_Order(object sender, EventArgs e)
+        {
+            Order.PickupStart = datePicker.Date.Add(timePicker.Time).ToUniversalTime();
+
+            var FlybuyService = DependencyService.Get<IFlybuyService>();
+            if (FlybuyService != null)
+            {
+                FlybuyService.CreateOrder(Order, Customer);
+            }
+        }
+
+        private void Update_Customer(object sender, EventArgs e)
         {
             var FlybuyService = DependencyService.Get<IFlybuyService>();
             if (FlybuyService != null)
@@ -40,7 +57,8 @@ namespace FlybuyExample
                 if (Customer.Token != null)
                 {
                     FlybuyService.UpdateCustomer(Customer);
-                } else
+                }
+                else
                 {
                     FlybuyService.CreateCustomer(Customer);
                 }

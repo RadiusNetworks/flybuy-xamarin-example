@@ -5,52 +5,56 @@
              xmlns:local="clr-namespace:FlybuyExample"
              x:Class="FlybuyExample.MainPage">
 
-    <xct:TabView TabStripPlacement="Top">
+    <xct:TabView TabStripPlacement="Bottom">
         <xct:TabViewItem Text="Redeem" BackgroundColor="#67aacf" TextColor="#ddfefe" TextColorSelected="#67aacf">
             <xct:TabViewItem.Content>
                 <StackLayout>
                     <Frame BackgroundColor="#67aacf" Padding="24">
-                    <Label Text="Redeem Order"
-                        FontSize="24"
-                        TextColor="#ddfefe"
-                        HorizontalOptions="Center"
-                        VerticalOptions="CenterAndExpand" />
-                    <!-- 
-                    <Button Text="Click me" Clicked="Button_Clicked" />
-                    -->
+                        <Label Text="Redeem Order"
+                            FontSize="24"
+                            TextColor="#ddfefe"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand" />
                     </Frame>
                 </StackLayout>
             </xct:TabViewItem.Content>
         </xct:TabViewItem>
-        <xct:TabViewItem Text="Create" BackgroundColor="#5681b6" TextColor="#d4eafd" TextColorSelected="#5681b6">
+        <xct:TabViewItem Text="Create" BackgroundColor="#5681b6" TextColor="#d4eafd">
             <xct:TabViewItem.Content>
-                <StackLayout>
+                <StackLayout Padding="10">
                     <Frame BackgroundColor="#5681b6" Padding="24">
-                    <Label Text="Create Order"
-                        FontSize="24"
-                        TextColor="#d4eafd"
-                        HorizontalOptions="Center"
-                        VerticalOptions="CenterAndExpand" />
-                    <!-- 
-                    <Button Text="Click me" Clicked="Button_Clicked" />
-                    -->
+                        <Label Text="Create Order"
+                            FontSize="24"
+                            TextColor="#d4eafd"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand" />
                     </Frame>
+                    <Label Text="Select Site" />
+                    <Picker Title="Site" ItemsSource="{Binding Sites}" SelectedItem="{Binding Order.Site}" />
+                    <Label Text="Select Type" />
+                    <Picker Title="Pickup Type" ItemsSource="{Binding PickupTypes}" SelectedItem="{Binding Order.PickupType}" />
+                    <Label Text="Pickup Time" />
+                    <DatePicker x:Name="datePicker" />
+                    <TimePicker x:Name="timePicker" />
+                    <Label Text="Order Number" />
+                    <Entry Text="{Binding Order.Number}" Placeholder="Order Number" />
+                    <Button Text="Create" TextColor="#d4eafd" BackgroundColor="#5681b6" CornerRadius="15" Clicked="Create_Order" />
                 </StackLayout>
             </xct:TabViewItem.Content>
         </xct:TabViewItem>
-        <xct:TabViewItem Text="Customer" BackgroundColor="#605597" TextColor="#d0d0fb" TextColorSelected="#605597">
+        <xct:TabViewItem Text="Customer" BackgroundColor="#605597" TextColor="#d0d0fb">
             <xct:TabViewItem.Content>
-                <StackLayout>
+                <StackLayout Padding="10">
                     <Frame BackgroundColor="#605597" Padding="24">
-                    <Label Text="Customer Details"
-                        FontSize="24"
-                        TextColor="#d0d0fb"
-                        HorizontalOptions="Center"
-                        VerticalOptions="CenterAndExpand" />
+                        <Label Text="Customer Details"
+                            FontSize="24"
+                            TextColor="#d0d0fb"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand" />
                     </Frame>
                     <TableView Intent="Settings">
                         <TableRoot>
-                            <TableSection Title="Basic Info" TextColor="Black">
+                            <TableSection Title="Contact Info" TextColor="Black">
                                 <EntryCell Text="{Binding Customer.Name}" Placeholder="Name" />
                                 <EntryCell Text="{Binding Customer.Phone}" Placeholder="Phone" />
                             </TableSection>
@@ -61,7 +65,7 @@
                             </TableSection>
                         </TableRoot>
                     </TableView>
-                    <Button Text="Update" Clicked="Button_Clicked" />
+                    <Button Text="Update" TextColor="#d0d0fb" BackgroundColor="#605597" CornerRadius="15" Clicked="Update_Customer" />
                 </StackLayout>
             </xct:TabViewItem.Content>
         </xct:TabViewItem>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FlybuyExample
 {
@@ -14,8 +15,10 @@ namespace FlybuyExample
 
         Order ClaimOrder(string redemptionCode, string pickupType);
 
-        Order CreateOrder(string siteNumber, string orderNumber, string pickupType, DateTime pickupStart, DateTime pickupEnd);
+        void CreateOrder(Order order, Customer customer);
 
-        void UpdateOrder(string orderNumber, string customerState);
+        void UpdateOrder(Order order, string customerState);
+
+        IList<Site> GetSites();
     }
 }

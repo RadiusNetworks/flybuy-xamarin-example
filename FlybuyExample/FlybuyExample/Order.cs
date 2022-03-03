@@ -11,7 +11,14 @@ namespace FlybuyExample
             PickupStart = new DateTime();
         }
 
-        public Order(Site site, string number, DateTime pickupStart, string pickupType)
+        public Order(Site site, string number, string pickupType)
+        {
+            Site = site;
+            Number = number;
+            PickupType = pickupType;
+        }
+
+        public Order(Site site, string number, string pickupType, DateTime pickupStart)
         {
             Site = site;
             Number = number;
@@ -23,6 +30,7 @@ namespace FlybuyExample
 
         public int Id { get; set; }
         public Site Site { get; set; }
+        public string Code { get; set; }
         public string Number { get; set; }
         public string PickupType { get; set; }
         public DateTime PickupStart { get; set; }

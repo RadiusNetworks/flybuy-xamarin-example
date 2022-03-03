@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using FlyBuy;
+using FlyBuy.Pickup;
 using FlybuyExample.Droid;
 
 [assembly: Xamarin.Forms.Dependency(typeof(FlybuyService))]
@@ -11,25 +12,25 @@ namespace FlybuyExample.Droid
     {
         private CustomerCallback CustomerCallback;
         private OrderCallback OrderCallback;
-        public static Java.Util.ISortedSet Sites;
 
         public FlybuyService()
         {
             CustomerCallback = new CustomerCallback();
             OrderCallback = new OrderCallback();
-            Core.sites.FetchAll("1", new SitesCallback());
+            Core.sites.FetchAll("", new SitesCallback());
         }
 
-        public void CreateCustomer(Customer customer)
-        {
-            var customerInfo = new FlyBuy.Data.CustomerInfo(
+        static FlyBuy.Data.CustomerInfo CustomerInfo(Customer customer) => new FlyBuy.Data.CustomerInfo(
                 customer.Name,
                 customer.Phone,
                 customer.CarType,
                 customer.CarColor,
                 customer.CarLicense);
-            FlyBuy.Core.customer.Create(
-                customerInfo,
+
+        public void CreateCustomer(Customer customer)
+        {
+            Core.customer.Create(
+                CustomerInfo(customer),
                 true, true,
                 null, null,
                 CustomerCallback);
@@ -37,47 +38,48 @@ namespace FlybuyExample.Droid
 
         public void UpdateCustomer(Customer customer)
         {
-            var customerInfo = new FlyBuy.Data.CustomerInfo(
-                customer.Name,
-                customer.Phone,
-                customer.CarType,
-                customer.CarColor,
-                customer.CarLicense);
-            FlyBuy.Core.customer.Update(customerInfo, CustomerCallback);
+            Core.customer.Update(
+                CustomerInfo(customer),
+                CustomerCallback);
         }
 
         public void CreateOrder(Order order, Customer customer)
         {
-            var customerInfo = new FlyBuy.Data.CustomerInfo(
-                customer.Name,
-                customer.Phone,
-                customer.CarType,
-                customer.CarColor,
-                customer.CarLicense);
-
             DateTime epoch = DateTime.UnixEpoch;
             TimeSpan ts = order.PickupStart.Subtract(epoch);
             ThreeTen.BP.Instant x = ThreeTen.BP.Instant.OfEpochMilli((long)ts.TotalMilliseconds);
             var pickupWindow = new FlyBuy.Data.PickupWindow(x);
 
-            FlyBuy.Core.orders.Create(
+            Core.orders.Create(
                 order.SiteId(),
                 order.Number,
-                customerInfo,
+                CustomerInfo(customer),
                 pickupWindow,
                 "created",
                 order.PickupType,
                 OrderCallback);
         }
 
-        public Order ClaimOrder(string redemptionCode, string pickupType)
+        public void ClaimOrder(Order order, Customer customer)
         {
-            throw new NotImplementedException();
+            Core.orders.Claim(
+                order.Code,
+                CustomerInfo(customer),
+                order.PickupType,
+                OrderCallback);
         }
 
         public void UpdateOrder(Order order, string customerState)
         {
-            throw new NotImplementedException();
+            Core.orders.UpdateCustomerState(
+                order.Id,
+                customerState,
+                OrderCallback);
+        }
+
+        public void FetchOrders()
+        {
+            Core.orders.Fetch(OrderCallback);
         }
 
         public Customer CurrentCustomer()
@@ -99,9 +101,29 @@ namespace FlybuyExample.Droid
             }
         }
 
-        public Order[] GetOrders()
+        public IList<Order> GetOrders()
         {
-            throw new NotImplementedException();
+            IList<Order> orders = new List<Order>();
+
+            foreach (FlyBuy.Data.Order order in Core.orders.Open)
+            {
+                FlyBuy.Data.Site flybuySite = order.Site;
+                Site site = new Site(flybuySite.Id, flybuySite.PartnerIdentifier, flybuySite.Name, flybuySite.Description);
+
+                FlyBuy.Data.PickupWindow pickupWindow = order.PickupWindow;
+                if (pickupWindow != null)
+                {
+                    ThreeTen.BP.Instant x = pickupWindow.Start;
+                    DateTime startTime = new DateTime(x.ToEpochMilli());
+                    orders.Add(new Order(site, order.PartnerIdentifier, order.PickupType, startTime));
+                }
+                else
+                {
+                    orders.Add(new Order(site, order.PartnerIdentifier, order.PickupType));
+                }
+            }
+
+            return orders;
         }
 
         public IList<Site> GetSites()
@@ -150,7 +172,14 @@ namespace FlybuyExample.Droid
             }
             else
             {
-                Console.WriteLine("Order [" + order.PartnerIdentifier + "] callback success");
+                if (order != null)
+                {
+                    Console.WriteLine("Order [" + order.PartnerIdentifier + "] callback success");
+                }
+                else
+                {
+                    Console.WriteLine("Order callback success");
+                }
             }
 
             return null;

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "310096746488",
+    "project_id": "flybuy-xamarin-example",
+    "storage_bucket": "flybuy-xamarin-example.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310096746488:android:24ba809f2150efac38e80d",
+        "android_client_info": {
+          "package_name": "com.radiusnetworks.flybuy_xamarin_example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310096746488-fssn8q93bf6n4a8raank9f2j7ostqmfk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQlNVUmDw-76M7rq9qR8wB0wkBkq9RB18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310096746488-fssn8q93bf6n4a8raank9f2j7ostqmfk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Plugin.FirebasePushNotification;
 using Xamarin.Forms;
 using DatePicker = Xamarin.Forms.DatePicker;
 
@@ -12,6 +13,7 @@ namespace FlybuyExample
     {
         public Customer Customer { get; set; }
         public Order Order { get; set; }
+        public IList<Order> Orders { get; set; }
         public IList<Site> Sites { get; set; }
         public Site Site { get; set; }
         public IList<string> PickupTypes { get; }
@@ -36,6 +38,20 @@ namespace FlybuyExample
             PickupTypes = new List<string> { "pickup", "curbside" };
 
             BindingContext = this;
+        }
+
+        private void Redeem_Order(object sender, EventArgs e)
+        {
+            string redemptionCode = Order.Code;
+
+            var FlybuyService = DependencyService.Get<IFlybuyService>();
+            if (FlybuyService != null && redemptionCode != null)
+            {
+                FlybuyService.ClaimOrder(Order, Customer);
+                FlybuyService.FetchOrders();
+            }
+
+            Console.WriteLine("ORDERS: " + FlybuyService.GetOrders().Count);
         }
 
         private void Create_Order(object sender, EventArgs e)

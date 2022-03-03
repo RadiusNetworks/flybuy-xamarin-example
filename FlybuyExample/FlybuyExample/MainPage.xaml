@@ -6,9 +6,9 @@
              x:Class="FlybuyExample.MainPage">
 
     <xct:TabView TabStripPlacement="Bottom">
-        <xct:TabViewItem Text="Redeem" BackgroundColor="#67aacf" TextColor="#ddfefe" TextColorSelected="#67aacf">
+        <xct:TabViewItem Text="Redeem" TextColor="#ddfefe" BackgroundColor="#67aacf">
             <xct:TabViewItem.Content>
-                <StackLayout>
+                <StackLayout Padding="10">
                     <Frame BackgroundColor="#67aacf" Padding="24">
                         <Label Text="Redeem Order"
                             FontSize="24"
@@ -16,18 +16,20 @@
                             HorizontalOptions="Center"
                             VerticalOptions="CenterAndExpand" />
                     </Frame>
+                    <Entry Text="{Binding Order.Code}" Placeholder="Redemption Code" />
+                    <Button Text="Redeem" TextColor="#ddfefe" BackgroundColor="#67aacf" CornerRadius="15" Clicked="Redeem_Order" />
                 </StackLayout>
             </xct:TabViewItem.Content>
         </xct:TabViewItem>
-        <xct:TabViewItem Text="Create" BackgroundColor="#5681b6" TextColor="#d4eafd">
+        <xct:TabViewItem Text="Create" TextColor="#d4eafd" BackgroundColor="#5681b6">
             <xct:TabViewItem.Content>
                 <StackLayout Padding="10">
                     <Frame BackgroundColor="#5681b6" Padding="24">
                         <Label Text="Create Order"
-                            FontSize="24"
-                            TextColor="#d4eafd"
-                            HorizontalOptions="Center"
-                            VerticalOptions="CenterAndExpand" />
+                                FontSize="24"
+                                TextColor="#d4eafd"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand" />
                     </Frame>
                     <Label Text="Select Site" />
                     <Picker Title="Site" ItemsSource="{Binding Sites}" SelectedItem="{Binding Order.Site}" />
@@ -42,7 +44,7 @@
                 </StackLayout>
             </xct:TabViewItem.Content>
         </xct:TabViewItem>
-        <xct:TabViewItem Text="Customer" BackgroundColor="#605597" TextColor="#d0d0fb">
+        <xct:TabViewItem Text="Customer" TextColor="#d0d0fb" BackgroundColor="#605597">
             <xct:TabViewItem.Content>
                 <StackLayout Padding="10">
                     <Frame BackgroundColor="#605597" Padding="24">

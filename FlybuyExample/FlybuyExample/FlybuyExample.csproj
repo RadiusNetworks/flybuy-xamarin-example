@@ -12,8 +12,10 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.0" />
+    <PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.1" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Xamarin.CommunityToolkit" />
+    <None Remove="Plugin.FirebasePushNotification" />
   </ItemGroup>
 </Project>

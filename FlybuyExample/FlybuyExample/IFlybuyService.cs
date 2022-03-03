@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FlybuyExample
 {
@@ -11,13 +10,15 @@ namespace FlybuyExample
 
         void UpdateCustomer(Customer customer);
 
-        Order[] GetOrders();
-
-        Order ClaimOrder(string redemptionCode, string pickupType);
+        void ClaimOrder(Order order, Customer customer);
 
         void CreateOrder(Order order, Customer customer);
 
         void UpdateOrder(Order order, string customerState);
+
+        void FetchOrders();
+
+        IList<Order> GetOrders();
 
         IList<Site> GetSites();
     }

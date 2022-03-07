@@ -21,5 +21,7 @@ namespace FlybuyExample
         IList<Order> GetOrders();
 
         IList<Site> GetSites();
+
+        void OnMessageReceived(IDictionary<string, object> data);
     }
 }

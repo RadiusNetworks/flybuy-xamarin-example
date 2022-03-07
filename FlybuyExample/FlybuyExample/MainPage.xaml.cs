@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Plugin.FirebasePushNotification;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
-using DatePicker = Xamarin.Forms.DatePicker;
 
 namespace FlybuyExample
 {
@@ -36,6 +36,24 @@ namespace FlybuyExample
 
             Order = new Order();
             PickupTypes = new List<string> { "pickup", "curbside" };
+
+            // Push message received event
+            CrossFirebasePushNotification.Current.OnNotificationReceived += async (s, p) =>
+            {
+                System.Diagnostics.Debug.WriteLine("Received: " + p.Data["body"]);
+
+                var flybuyService = DependencyService.Get<IFlybuyService>();
+                if (flybuyService != null)
+                {
+                    flybuyService.OnMessageReceived(p.Data);
+                }
+            };
+
+            // Push message open event
+            CrossFirebasePushNotification.Current.OnNotificationOpened += (s, p) =>
+            {
+                System.Diagnostics.Debug.WriteLine("Opened");
+            };
 
             BindingContext = this;
         }

@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+
 using Android.App;
 using Android.OS;
 using Android.Runtime;
+
 using Firebase;
 using Plugin.FirebasePushNotification;
+
+using FlyBuy;
 
 [Application]
 public class MainApplication : Application
@@ -33,9 +38,26 @@ public class MainApplication : Application
         FirebasePushNotificationManager.Initialize(this, false);
 #endif
 
-        //Handle notification when app is closed here
-        CrossFirebasePushNotification.Current.OnNotificationReceived += (s, p) =>
+        CrossFirebasePushNotification.Current.OnTokenRefresh += (s, p) =>
         {
+            System.Diagnostics.Debug.WriteLine($"TOKEN : {p.Token}");
+
+            Core.OnNewPushToken(p.Token);
         };
+    }
+
+    class Callback : Java.Lang.Object, Kotlin.Jvm.Functions.IFunction1
+    {
+        public Java.Lang.Object Invoke(Java.Lang.Object p0)
+        {
+            var error = p0 as FlyBuy.Data.SdkError;
+
+            if (error != null)
+            {
+                Console.WriteLine("Callback error: " + error.UserError());
+            }
+
+            return null;
+        }
     }
 }

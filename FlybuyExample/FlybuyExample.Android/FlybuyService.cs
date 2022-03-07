@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using FlyBuy;
-using FlyBuy.Pickup;
 using FlybuyExample.Droid;
 
 [assembly: Xamarin.Forms.Dependency(typeof(FlybuyService))]
@@ -137,6 +136,17 @@ namespace FlybuyExample.Droid
 
             return sites;
         }
+
+        public void OnMessageReceived(IDictionary<string, object> data)
+        {
+            IDictionary<string, string> q = new Dictionary<string, string>();
+            foreach (var p in data)
+            {
+                System.Diagnostics.Debug.WriteLine($"{p.Key} : {p.Value}");
+                q.Add(p.Key, p.Value.ToString());
+            }
+            Core.OnMessageReceived(q, new Callback());
+        }
     }
 
     class CustomerCallback : Java.Lang.Object, Kotlin.Jvm.Functions.IFunction2
@@ -191,6 +201,21 @@ namespace FlybuyExample.Droid
         public Java.Lang.Object Invoke(Java.Lang.Object p0, Java.Lang.Object p1)
         {
             var error = p1 as FlyBuy.Data.SdkError;
+
+            if (error != null)
+            {
+                Console.WriteLine("Sites callback error: " + error.UserError());
+            }
+
+            return null;
+        }
+    }
+
+    class Callback : Java.Lang.Object, Kotlin.Jvm.Functions.IFunction1
+    {
+        public Java.Lang.Object Invoke(Java.Lang.Object p0)
+        {
+            var error = p0 as FlyBuy.Data.SdkError;
 
             if (error != null)
             {

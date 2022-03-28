@@ -25,7 +25,7 @@ namespace FlybuyExample
             var FlybuyService = DependencyService.Get<IFlybuyService>();
             if (FlybuyService != null)
             {
-                Sites = FlybuyService.GetSites();
+                //Sites = FlybuyService.GetSites();
                 Customer = FlybuyService.CurrentCustomer();
             }
 
@@ -69,6 +69,8 @@ namespace FlybuyExample
                 FlybuyService.FetchOrders();
             }
 
+            Sites = FlybuyService.GetSites();
+            Console.WriteLine("SITES: " + Sites.Count);
             Console.WriteLine("ORDERS: " + FlybuyService.GetOrders().Count);
         }
 

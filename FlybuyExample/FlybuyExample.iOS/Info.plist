@@ -34,5 +34,15 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.radiusnetworks.flybuy.flybuy-example</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>FlyBuy location tracking</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>FlyBuy location tracking</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>location</string>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

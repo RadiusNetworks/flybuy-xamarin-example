@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using AndroidX.Lifecycle;
 using FlyBuy;
 using FlybuyExample.Droid;
 
@@ -107,18 +107,33 @@ namespace FlybuyExample.Droid
             foreach (FlyBuy.Data.Order order in Core.orders.Open)
             {
                 FlyBuy.Data.Site flybuySite = order.Site;
-                Site site = new Site(flybuySite.Id, flybuySite.PartnerIdentifier, flybuySite.Name, flybuySite.Description);
+                Site site = new Site(
+                    flybuySite.Id,
+                    flybuySite.PartnerIdentifier,
+                    flybuySite.Name,
+                    flybuySite.Description);
 
                 FlyBuy.Data.PickupWindow pickupWindow = order.PickupWindow;
                 if (pickupWindow != null)
                 {
                     ThreeTen.BP.Instant x = pickupWindow.Start;
                     DateTime startTime = new DateTime(x.ToEpochMilli());
-                    orders.Add(new Order(site, order.PartnerIdentifier, order.PickupType, startTime));
+                    orders.Add(
+                        new Order(
+                            site,
+                            order.PartnerIdentifier,
+                            order.PickupType,
+                            startTime)
+                        );
                 }
                 else
                 {
-                    orders.Add(new Order(site, order.PartnerIdentifier, order.PickupType));
+                    orders.Add(
+                        new Order(
+                            site,
+                            order.PartnerIdentifier,
+                            order.PickupType)
+                        );
                 }
             }
 
@@ -188,6 +203,9 @@ namespace FlybuyExample.Droid
                 }
                 else
                 {
+                    //LiveData x = Core.orders.GetOrder(order.Id);
+                    //x.Observe(this, null);
+
                     Console.WriteLine("Order callback success");
                 }
             }

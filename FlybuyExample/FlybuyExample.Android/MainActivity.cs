@@ -38,12 +38,12 @@ namespace FlybuyExample.Droid
         protected override void OnStart()
         {
             base.OnStart();
-            RequestLocationPermissions();
+            RequestPermissions();
         }
 
-        private void RequestLocationPermissions()
+        private void RequestPermissions()
         {
-            var permissions = CheckForMissingLocationPermissions();
+            var permissions = CheckForMissingPermissions();
             if (permissions.Count > 0)
             {
                 ActivityCompat.RequestPermissions(this, permissions.ToArray(), IRIS_PERMISSIONS_REQUEST);
@@ -55,7 +55,7 @@ namespace FlybuyExample.Droid
             }
         }
 
-        private List<string> CheckForMissingLocationPermissions()
+        private List<string> CheckForMissingPermissions()
         {
             var permissionsToRequest = new List<string>();
 

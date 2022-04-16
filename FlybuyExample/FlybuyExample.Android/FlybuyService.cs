@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AndroidX.Lifecycle;
+using System.Collections.ObjectModel;
 using FlyBuy;
 using FlybuyExample.Droid;
 
@@ -9,6 +9,8 @@ namespace FlybuyExample.Droid
 {
     public class FlybuyService : IFlybuyService
     {
+        static private ObservableCollection<Site> Sites { get; set; }
+        static private ObservableCollection<Order> Orders { get; set; }
         private CustomerCallback CustomerCallback;
         private OrderCallback OrderCallback;
 
@@ -21,10 +23,10 @@ namespace FlybuyExample.Droid
 
         static FlyBuy.Data.CustomerInfo CustomerInfo(Customer customer) => new FlyBuy.Data.CustomerInfo(
                 customer.Name,
-                customer.Phone,
                 customer.CarType,
                 customer.CarColor,
-                customer.CarLicense);
+                customer.CarLicense,
+                customer.Phone);
 
         public void CreateCustomer(Customer customer)
         {
@@ -100,10 +102,9 @@ namespace FlybuyExample.Droid
             }
         }
 
-        public IList<Order> GetOrders()
+        public ObservableCollection<Order> GetOrders()
         {
-            IList<Order> orders = new List<Order>();
-
+            Orders.Clear();
             foreach (FlyBuy.Data.Order order in Core.orders.Open)
             {
                 FlyBuy.Data.Site flybuySite = order.Site;
@@ -118,8 +119,9 @@ namespace FlybuyExample.Droid
                 {
                     ThreeTen.BP.Instant x = pickupWindow.Start;
                     DateTime startTime = new DateTime(x.ToEpochMilli());
-                    orders.Add(
+                    Orders.Add(
                         new Order(
+                            (int)order.Id,
                             site,
                             order.PartnerIdentifier,
                             order.PickupType,
@@ -128,8 +130,9 @@ namespace FlybuyExample.Droid
                 }
                 else
                 {
-                    orders.Add(
+                    Orders.Add(
                         new Order(
+                            (int)order.Id,
                             site,
                             order.PartnerIdentifier,
                             order.PickupType)
@@ -137,19 +140,19 @@ namespace FlybuyExample.Droid
                 }
             }
 
-            return orders;
+            return Orders;
         }
 
-        public IList<Site> GetSites()
+        public ObservableCollection<Site> GetSites()
         {
-            IList<Site> sites = new List<Site>();
-
-            foreach (FlyBuy.Data.Site site in Core.sites.All)
+            if (Sites.Count == 0)
             {
-                sites.Add(new Site(site.Id, site.PartnerIdentifier, site.Name, site.Description));
+                foreach (FlyBuy.Data.Site site in Core.sites.All)
+                {
+                    Sites.Add(new Site(site.Id, site.PartnerIdentifier, site.Name, site.Description));
+                }
             }
-
-            return sites;
+            return Sites;
         }
 
         public void OnMessageReceived(IDictionary<string, object> data)

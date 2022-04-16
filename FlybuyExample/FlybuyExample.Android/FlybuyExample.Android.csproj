@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
     <PackageReference Include="Xamarin.CommunityToolkit">
       <Version>2.0.1</Version>
     </PackageReference>
@@ -58,8 +57,11 @@
     <PackageReference Include="CrossPlatformLiveData.Android">
       <Version>1.0.4</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Forms">
+      <Version>5.0.0.2291</Version>
+    </PackageReference>
     <PackageReference Include="Radiusnetworks.Flybuy.Android">
-      <Version>2.4.1</Version>
+      <Version>2.1.5</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

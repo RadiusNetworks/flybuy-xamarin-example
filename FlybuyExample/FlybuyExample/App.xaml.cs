@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace FlybuyExample
@@ -20,15 +21,8 @@ namespace FlybuyExample
             var flybuyService = DependencyService.Get<IFlybuyService>();
             if (flybuyService != null)
             {
-                customer = flybuyService.CurrentCustomer();
-                if (customer == null)
-                {
-                    Console.WriteLine("No Customer");
-                }
-                else
-                {
-                    Console.WriteLine("Customer " + customer.Name + " Exists");
-                }
+                flybuyService.GetSites();
+                flybuyService.GetOrders();
             }
         }
 

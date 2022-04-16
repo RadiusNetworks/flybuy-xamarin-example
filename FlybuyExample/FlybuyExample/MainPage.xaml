@@ -17,6 +17,9 @@
                     </Frame>
                     <Entry Text="{Binding Order.Code}" Placeholder="Redemption Code" />
                     <Button Text="Redeem" TextColor="#ddfefe" BackgroundColor="#67aacf" CornerRadius="15" Clicked="Redeem_Order" />
+                    <Button Text="En Route" TextColor="#ddfedd" BackgroundColor="#67cfaa" CornerRadius="15" Clicked="Enroute" />
+                    <Button Text="Arrived" TextColor="#fefedd" BackgroundColor="#cfcfaa" CornerRadius="15" Clicked="Arrived" />
+                    <Button Text="Done" TextColor="#fedddd" BackgroundColor="#cf67aa" CornerRadius="15" Clicked="Done" />
                 </StackLayout>
             </xct:TabViewItem.Content>
         </xct:TabViewItem>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using FlyBuy;
 using FlybuyExample.iOS;
 
@@ -8,22 +9,21 @@ namespace FlybuyExample.iOS
 {
     public class FlybuyService : IFlybuyService
     {
-        static private IList<Site> sites = new List<Site>();
-        //private CustomerCallback CustomerCallback;
-        //private OrderCallback OrderCallback;
+        static private ObservableCollection<Site> Sites { get; set; }
+        static private ObservableCollection<Order> Orders { get; set; }
 
         public FlybuyService()
         {
-            //CustomerCallback = new CustomerCallback();
-            //OrderCallback = new OrderCallback();
+            Sites = new ObservableCollection<Site>();
+            Orders = new ObservableCollection<Order>();
         }
 
         static FlyBuyCustomerInfo CustomerInfo(Customer customer) => new FlyBuyCustomerInfo(
                 customer.Name,
-                customer.Phone,
                 customer.CarType,
                 customer.CarColor,
-                customer.CarLicense);
+                customer.CarLicense,
+                customer.Phone);
 
         public void CreateCustomer(Customer customer)
         {
@@ -65,7 +65,7 @@ namespace FlybuyExample.iOS
             DateTime epoch = DateTime.UnixEpoch;
             TimeSpan ts = order.PickupStart.Subtract(epoch);
             Foundation.NSDate start = new Foundation.NSDate((long)ts.TotalMilliseconds);
-            var pickupWindow = new FlyBuyPickupWindow(start, null);
+            var pickupWindow = new FlyBuyPickupWindow(start, start);
 
             FlyBuyCore.Orders.CreateWithSiteID(
                 order.SiteId(),
@@ -83,6 +83,7 @@ namespace FlybuyExample.iOS
                     else
                     {
                         Console.WriteLine("Create order success");
+                        FetchOrders();
                     }
                 });
         }
@@ -102,6 +103,7 @@ namespace FlybuyExample.iOS
                     else
                     {
                         Console.WriteLine("Claim order success");
+                        FetchOrders();
                     }
                 });
         }
@@ -160,10 +162,9 @@ namespace FlybuyExample.iOS
             }
         }
 
-        public IList<Order> GetOrders()
+        public ObservableCollection<Order> GetOrders()
         {
-            IList<Order> orders = new List<Order>();
-
+            Orders.Clear();
             foreach (FlyBuyOrder order in FlyBuyCore.Orders.Open)
             {
                 Site site = new Site(
@@ -177,8 +178,9 @@ namespace FlybuyExample.iOS
                 {
                     double x = pickupWindow.Start.SecondsSince1970;
                     var startTime = new DateTime((long)x * 1000L);
-                    orders.Add(
+                    Orders.Add(
                         new Order(
+                            (int)order.Id,
                             site,
                             order.PartnerIdentifier,
                             order.PickupType,
@@ -187,8 +189,9 @@ namespace FlybuyExample.iOS
                 }
                 else
                 {
-                    orders.Add(
+                    Orders.Add(
                         new Order(
+                            (int)order.Id,
                             site,
                             order.PartnerIdentifier,
                             order.PickupType)
@@ -196,12 +199,12 @@ namespace FlybuyExample.iOS
                 }
             }
 
-            return orders;
+            return Orders;
         }
 
-        public IList<Site> GetSites()
+        public ObservableCollection<Site> GetSites()
         {
-            if (sites.Count == 0)
+            if (Sites.Count == 0)
             {
                 FlyBuyCore.Sites.FetchAllWithQuery("",
                     (Foundation.NSArray<FlyBuySite> sites1, Foundation.NSError error) =>
@@ -214,14 +217,20 @@ namespace FlybuyExample.iOS
                         {
                             foreach (FlyBuySite site in sites1)
                             {
-                                sites.Add(new Site((int)site.Id, site.PartnerIdentifier, site.Name, site.Description));
+                                Sites.Add(
+                                    new Site(
+                                        (int)site.Id,
+                                        site.PartnerIdentifier,
+                                        site.Name,
+                                        site.Description)
+                                    );
                             }
                             Console.WriteLine("Site fetch success");
                         }
                     });
             }
 
-            return sites;
+            return Sites;
         }
 
         public void OnMessageReceived(IDictionary<string, object> data)
@@ -234,8 +243,5 @@ namespace FlybuyExample.iOS
             }
             FlyBuyCore.HandleRemoteNotification(q);
         }
-
-
-
     }
 }

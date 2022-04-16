@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using Plugin.FirebasePushNotification;
-using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 
 namespace FlybuyExample
@@ -13,8 +10,14 @@ namespace FlybuyExample
     {
         public Customer Customer { get; set; }
         public Order Order { get; set; }
-        public IList<Order> Orders { get; set; }
-        public IList<Site> Sites { get; set; }
+        public ObservableCollection<Order> Orders
+        {
+            get { return DependencyService.Get<IFlybuyService>().GetOrders(); }
+        }
+        public ObservableCollection<Site> Sites
+        {
+            get { return DependencyService.Get<IFlybuyService>().GetSites(); }
+        }
         public Site Site { get; set; }
         public IList<string> PickupTypes { get; }
 
@@ -22,27 +25,29 @@ namespace FlybuyExample
         {
             InitializeComponent();
 
-            var FlybuyService = DependencyService.Get<IFlybuyService>();
-            if (FlybuyService != null)
-            {
-                //Sites = FlybuyService.GetSites();
-                Customer = FlybuyService.CurrentCustomer();
-            }
-
-            if (null == Customer)
-            {
-                Customer = new Customer();
-            }
-
             Order = new Order();
             PickupTypes = new List<string> { "pickup", "curbside" };
+
+            var flybuyService = DependencyService.Get<IFlybuyService>();
+            if (flybuyService != null)
+            {
+                Customer = flybuyService.CurrentCustomer();
+                if (Customer == null)
+                {
+                    Console.WriteLine("No Customer");
+                }
+                else
+                {
+                    Console.WriteLine("Customer " + Customer.Name + " Exists");
+                }
+            }
 
             // Push message received event
             CrossFirebasePushNotification.Current.OnNotificationReceived += async (s, p) =>
             {
                 System.Diagnostics.Debug.WriteLine("Received: " + p.Data["body"]);
 
-                var flybuyService = DependencyService.Get<IFlybuyService>();
+                //var flybuyService = DependencyService.Get<IFlybuyService>();
                 if (flybuyService != null)
                 {
                     flybuyService.OnMessageReceived(p.Data);
@@ -69,9 +74,7 @@ namespace FlybuyExample
                 FlybuyService.FetchOrders();
             }
 
-            Sites = FlybuyService.GetSites();
-            Console.WriteLine("SITES: " + Sites.Count);
-            Console.WriteLine("ORDERS: " + FlybuyService.GetOrders().Count);
+            Console.WriteLine("Fetched order count: " + Orders.Count);
         }
 
         private void Create_Order(object sender, EventArgs e)
@@ -100,6 +103,34 @@ namespace FlybuyExample
                 }
             }
             //((Button)sender).Text = $"You clicked {count} times.";
+        }
+
+        private void Enroute(object sender, EventArgs e)
+        {
+            UpdateCustomerState("en_route");
+        }
+
+        private void Arrived(object sender, EventArgs e)
+        {
+            UpdateCustomerState("waiting");
+        }
+
+        private void Done(object sender, EventArgs e)
+        {
+            UpdateCustomerState("completed");
+        }
+
+        private void UpdateCustomerState(string state)
+        {
+            if (Orders.Count > 0)
+            {
+                Order = Orders[0];
+                var FlybuyService = DependencyService.Get<IFlybuyService>();
+                if (FlybuyService != null && Order != null)
+                {
+                    FlybuyService.UpdateOrder(Order, state);
+                }
+            }
         }
     }
 }

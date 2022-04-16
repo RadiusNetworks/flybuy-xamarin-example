@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace FlybuyExample
 {
@@ -18,9 +19,9 @@ namespace FlybuyExample
 
         void FetchOrders();
 
-        IList<Order> GetOrders();
+        ObservableCollection<Order> GetOrders();
 
-        IList<Site> GetSites();
+        ObservableCollection<Site> GetSites();
 
         void OnMessageReceived(IDictionary<string, object> data);
     }

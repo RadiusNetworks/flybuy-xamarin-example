@@ -18,6 +18,8 @@ namespace FlybuyExample.Droid
         {
             CustomerCallback = new CustomerCallback();
             OrderCallback = new OrderCallback();
+            Sites = new ObservableCollection<Site>();
+            Orders = new ObservableCollection<Order>();
             Core.sites.FetchAll("", new SitesCallback());
         }
 

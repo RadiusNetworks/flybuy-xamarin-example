@@ -6,8 +6,6 @@ namespace FlybuyExample
 {
     public partial class App : Application
     {
-        public Customer customer;
-
         public App()
         {
             InitializeComponent();

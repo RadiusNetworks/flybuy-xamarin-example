@@ -23,7 +23,7 @@ namespace FlybuyExample.Droid
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            string appToken = "426.otMfWCDb4vsYKyZZtociLpJs";
+            string appToken = "101.token";
 
             Core.Configure(this, appToken);
 

@@ -30,7 +30,7 @@ namespace FlybuyExample.iOS
             locationManager.RequestWhenInUseAuthorization();
 
             var opts = new NSDictionary<NSString, NSObject>(
-                new NSString("token"), new NSString("427.83r3299CtMi8H2LdNy4ZxAFr")
+                new NSString("token"), new NSString("102.token")
             );
 
             FlyBuyCore.Configure(opts);

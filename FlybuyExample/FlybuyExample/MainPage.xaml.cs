@@ -35,6 +35,7 @@ namespace FlybuyExample
                 if (Customer == null)
                 {
                     Console.WriteLine("No Customer");
+                    Customer = new Customer();
                 }
                 else
                 {
@@ -70,6 +71,7 @@ namespace FlybuyExample
             var FlybuyService = DependencyService.Get<IFlybuyService>();
             if (FlybuyService != null && redemptionCode != null)
             {
+                //FlybuyService.FetchOrder(redemptionCode);
                 FlybuyService.ClaimOrder(Order, Customer);
                 FlybuyService.FetchOrders();
             }
@@ -93,7 +95,7 @@ namespace FlybuyExample
             var FlybuyService = DependencyService.Get<IFlybuyService>();
             if (FlybuyService != null)
             {
-                if (Customer.Token != null)
+                if (Customer != null && Customer.Token != null)
                 {
                     FlybuyService.UpdateCustomer(Customer);
                 }

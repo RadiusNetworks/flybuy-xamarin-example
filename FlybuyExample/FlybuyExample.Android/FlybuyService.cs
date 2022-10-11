@@ -20,30 +20,44 @@ namespace FlybuyExample.Droid
             OrderCallback = new OrderCallback();
             Sites = new ObservableCollection<Site>();
             Orders = new ObservableCollection<Order>();
-            Core.sites.FetchAll("", new SitesCallback());
+            Core.sites.FetchAll("", "live", new SitesCallback());
         }
 
         static FlyBuy.Data.CustomerInfo CustomerInfo(Customer customer) => new FlyBuy.Data.CustomerInfo(
                 customer.Name,
+                customer.Phone,
                 customer.CarType,
                 customer.CarColor,
-                customer.CarLicense,
-                customer.Phone);
+                customer.CarLicense);
 
         public void CreateCustomer(Customer customer)
         {
-            Core.customer.Create(
-                CustomerInfo(customer),
-                true, true,
-                null, null,
-                CustomerCallback);
+            if (customer != null)
+            {
+                Core.customer.Create(
+                    CustomerInfo(customer),
+                    true, true,
+                    null, null,
+                    CustomerCallback);
+            }
+            else
+            {
+                Console.WriteLine("Create customer null");
+            }
         }
 
         public void UpdateCustomer(Customer customer)
         {
-            Core.customer.Update(
-                CustomerInfo(customer),
-                CustomerCallback);
+            if (customer != null)
+            {
+                Core.customer.Update(
+                    CustomerInfo(customer),
+                    CustomerCallback);
+            }
+            else
+            {
+                Console.WriteLine("Update customer null");
+            }
         }
 
         public void CreateOrder(Order order, Customer customer)
@@ -53,23 +67,44 @@ namespace FlybuyExample.Droid
             ThreeTen.BP.Instant x = ThreeTen.BP.Instant.OfEpochMilli((long)ts.TotalMilliseconds);
             var pickupWindow = new FlyBuy.Data.PickupWindow(x);
 
-            Core.orders.Create(
-                order.SiteId(),
-                order.Number,
-                CustomerInfo(customer),
-                pickupWindow,
-                "created",
-                order.PickupType,
+            if (customer != null)
+            {
+                Core.orders.Create(
+                    order.SiteId(),
+                    order.Number,
+                    CustomerInfo(customer),
+                    pickupWindow,
+                    "created",
+                    order.PickupType,
+                    OrderCallback);
+            }
+            else
+            {
+                Console.WriteLine("Create order customer null");
+            }
+        }
+
+        public void FetchOrder(String code)
+        {
+            Core.orders.Fetch(
+                code,
                 OrderCallback);
         }
 
         public void ClaimOrder(Order order, Customer customer)
         {
-            Core.orders.Claim(
-                order.Code,
-                CustomerInfo(customer),
-                order.PickupType,
-                OrderCallback);
+            if (customer != null)
+            {
+                Core.orders.Claim(
+                    order.Code,
+                    CustomerInfo(customer),
+                    order.PickupType,
+                    OrderCallback);
+            }
+            else
+            {
+                Console.WriteLine("Claim order customer null");
+            }
         }
 
         public void UpdateOrder(Order order, string customerState)
@@ -204,6 +239,11 @@ namespace FlybuyExample.Droid
             {
                 if (order != null)
                 {
+                    string s = order.CustomerState;
+                    string p = order.Customer.Phone;
+                    string n = order.Customer.Name;
+                    Console.WriteLine("Order Phone: " + p);
+                    Console.WriteLine("Order Name: " + n);
                     Console.WriteLine("Order [" + order.PartnerIdentifier + "] callback success");
                 }
                 else

@@ -9,6 +9,7 @@ using Firebase;
 using Plugin.FirebasePushNotification;
 
 using FlyBuy;
+using FlyBuy.Pickup;
 
 [Application]
 public class MainApplication : Application
@@ -20,6 +21,12 @@ public class MainApplication : Application
     public override void OnCreate()
     {
         base.OnCreate();
+
+        string appToken = "427.83r3299CtMi8H2LdNy4ZxAFr";
+        Core.Configure(this, appToken);
+
+        var Pickup = PickupManager.Manager.GetInstance(null) as PickupManager;
+        Pickup.Configure(this);
 
         //Set the default notification channel for your app when running Android Oreo
         if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
@@ -33,7 +40,7 @@ public class MainApplication : Application
 
         //If debug you should reset the token each time.
 #if DEBUG
-        FirebasePushNotificationManager.Initialize(this, true);
+        //FirebasePushNotificationManager.Initialize(this, true);
 #else
         FirebasePushNotificationManager.Initialize(this, false);
 #endif

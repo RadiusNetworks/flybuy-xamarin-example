@@ -88,6 +88,24 @@ namespace FlybuyExample.iOS
                 });
         }
 
+        public void FetchOrder(string code)
+        {
+            FlyBuyCore.Orders.FetchWithRedemptionCode(
+                code,
+                (FlyBuyOrder order1, Foundation.NSError error) =>
+                {
+                    if (error != null)
+                    {
+                        Console.WriteLine("Claim order error: " + error.LocalizedDescription);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Claim order success");
+                        FetchOrders();
+                    }
+                });
+        }
+
         public void ClaimOrder(Order order, Customer customer)
         {
             FlyBuyCore.Orders.ClaimWithRedemptionCode(

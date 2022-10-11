@@ -11,6 +11,8 @@ namespace FlybuyExample
 
         void UpdateCustomer(Customer customer);
 
+        void FetchOrder(string code);
+
         void ClaimOrder(Order order, Customer customer);
 
         void CreateOrder(Order order, Customer customer);

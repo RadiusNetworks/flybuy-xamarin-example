@@ -150,19 +150,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.CommunityToolkit">
-      <Version>2.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Plugin.FirebasePushNotification">
-      <Version>3.4.1</Version>
-    </PackageReference>
-    <PackageReference Include="CrossPlatformLiveData">
-      <Version>1.0.2</Version>
+      <Version>2.0.5</Version>
     </PackageReference>
     <PackageReference Include="Radiusnetworks.Flybuy.IOS.sim">
       <Version>2.4.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>5.0.0.2291</Version>
+      <Version>5.0.0.2515</Version>
+    </PackageReference>
+    <PackageReference Include="Plugin.FirebasePushNotification">
+      <Version>3.4.25</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

@@ -23,13 +23,6 @@ namespace FlybuyExample.Droid
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            string appToken = "101.token";
-
-            Core.Configure(this, appToken);
-
-            var Pickup = PickupManager.Manager.GetInstance(null) as PickupManager;
-            Pickup.Configure(this);
-
             LoadApplication(new App());
 
             FirebasePushNotificationManager.ProcessIntent(this, Intent);
@@ -51,7 +44,7 @@ namespace FlybuyExample.Droid
             else
             {
                 var Pickup = PickupManager.Manager.GetInstance(null) as PickupManager;
-                Pickup.OnLocationPermissionChanged();
+                Pickup.OnPermissionChanged();
             }
         }
 

@@ -9,10 +9,15 @@ Replace the string `101.token` in `MainActivity.cs` with an app token set up in 
  * `FlybuyExample/FlybuyExample.Android/MainActivity.cs`
 
 ```
+            // Init ThreeTen lib
+            AndroidThreeTen.Init(this);
+
+            // Configure SDK
             string appToken = "101.token";
+            ConfigOptions opts = new ConfigOptions.Builder(appToken).SetDeferredLocationTrackingEnabled(true).Build();
+            Core.Configure(this, opts);
 
-            Core.Configure(this, appToken);
-
+            // Configure Pickup Module
             var Pickup = PickupManager.Manager.GetInstance(null) as PickupManager;
             Pickup.Configure(this);
 ```
@@ -24,10 +29,11 @@ Replace the string `102.token` in `AppDelegate.cs` with an app token set up in t
  * `FlybuyExample/FlybuyExample.iOS/AppDelegate.cs`
 
 ```
-            var opts = new NSDictionary<NSString, NSObject>(
-                new NSString("token"), new NSString("102.token")
-            );
+            // Configure SDK
+            var token = "102.token";
+            var opts = FlyBuyConfigOptions.BuilderWithToken(token).SetDeferredLocationTracking(true).Build;
+            FlyBuyCore.ConfigureWithOptions(opts);
 
-            FlyBuyCore.Configure(opts);
+            // Configure Pickup Module
             FlyBuyPickupManager.Shared.Configure();
 ```

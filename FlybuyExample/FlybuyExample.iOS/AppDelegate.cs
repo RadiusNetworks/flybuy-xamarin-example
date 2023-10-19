@@ -29,11 +29,12 @@ namespace FlybuyExample.iOS
             locationManager = new CLLocationManager();
             locationManager.RequestWhenInUseAuthorization();
 
-            var opts = new NSDictionary<NSString, NSObject>(
-                new NSString("token"), new NSString("102.token")
-            );
+            // Configure SDK
+            var token = "102.token";
+            var opts = FlyBuyConfigOptions.BuilderWithToken(token).SetDeferredLocationTracking(true).Build;
+            FlyBuyCore.ConfigureWithOptions(opts);
 
-            FlyBuyCore.Configure(opts);
+            // Configure Pickup Module
             FlyBuyPickupManager.Shared.Configure();
 
             return base.FinishedLaunching(app, options);

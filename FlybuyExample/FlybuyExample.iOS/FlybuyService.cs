@@ -233,7 +233,8 @@ namespace FlybuyExample.iOS
                         }
                         else
                         {
-                            foreach (FlyBuySite site in sites1)
+                            FlyBuySite[] sites2 = sites1.ToArray<FlyBuySite>();
+                            foreach (FlyBuySite site in sites2)
                             {
                                 Sites.Add(
                                     new Site(

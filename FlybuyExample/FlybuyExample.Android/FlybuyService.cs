@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Com.Radiusnetworks.Flybuy.Sdk.Manager.Builder;
 using FlyBuy;
+using FlyBuy.Data;
 using FlybuyExample.Droid;
 
 [assembly: Xamarin.Forms.Dependency(typeof(FlybuyService))]
@@ -69,14 +71,18 @@ namespace FlybuyExample.Droid
 
             if (customer != null)
             {
-                Core.orders.Create(
-                    order.SiteId(),
-                    order.Number,
-                    CustomerInfo(customer),
-                    pickupWindow,
-                    "created",
-                    order.PickupType,
-                    OrderCallback);
+                OrderOptions orderOptions = new OrderOptions.Builder(customer.Name).
+                    SetCustomerPhone(customer.Phone).
+                    SetCustomerCarColor(customer.CarColor).
+                    SetCustomerCarType(customer.CarType).
+                    SetCustomerCarPlate(customer.CarLicense).
+                    SetPartnerIdentifier(order.Number).
+                    SetPickupWindow(pickupWindow).
+                    SetState("ready").
+                    SetPickupType(order.PickupType).
+                    Build();
+
+                Core.orders.Create(order.SiteId(), orderOptions, new OrderCallback());
             }
             else
             {
@@ -95,11 +101,15 @@ namespace FlybuyExample.Droid
         {
             if (customer != null)
             {
-                Core.orders.Claim(
-                    order.Code,
-                    CustomerInfo(customer),
-                    order.PickupType,
-                    OrderCallback);
+                OrderOptions orderOptions = new OrderOptions.Builder(customer.Name).
+                    SetCustomerPhone(customer.Phone).
+                    SetCustomerCarColor(customer.CarColor).
+                    SetCustomerCarType(customer.CarType).
+                    SetCustomerCarPlate(customer.CarLicense).
+                    SetPickupType(order.PickupType).
+                    Build();
+
+                Core.orders.Claim(order.Code, orderOptions, OrderCallback);
             }
             else
             {
@@ -117,6 +127,8 @@ namespace FlybuyExample.Droid
 
         public void FetchOrders()
         {
+            Core.sites.FetchByPartnerIdentifier("1116", "live", new SitesCallback());
+
             Core.orders.Fetch(OrderCallback);
         }
 
@@ -263,7 +275,13 @@ namespace FlybuyExample.Droid
     {
         public Java.Lang.Object Invoke(Java.Lang.Object p0, Java.Lang.Object p1)
         {
+            var site = p0 as FlyBuy.Data.Site;
             var error = p1 as FlyBuy.Data.SdkError;
+
+            if (site != null)
+            {
+                Console.WriteLine("Getting back from sites --> " + site.Name);
+            }
 
             if (error != null)
             {

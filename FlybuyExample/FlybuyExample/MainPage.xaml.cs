@@ -69,10 +69,13 @@ namespace FlybuyExample
             string redemptionCode = Order.Code;
 
             var FlybuyService = DependencyService.Get<IFlybuyService>();
-            if (FlybuyService != null && redemptionCode != null)
+            if (FlybuyService != null)
             {
-                //FlybuyService.FetchOrder(redemptionCode);
-                FlybuyService.ClaimOrder(Order, Customer);
+                if (redemptionCode != null)
+                {
+                    FlybuyService.ClaimOrder(Order, Customer);
+                }
+                
                 FlybuyService.FetchOrders();
             }
 

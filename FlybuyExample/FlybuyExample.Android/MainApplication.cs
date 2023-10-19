@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Android.App;
 using Android.OS;
@@ -10,21 +9,30 @@ using Plugin.FirebasePushNotification;
 
 using FlyBuy;
 using FlyBuy.Pickup;
+using ThreeTenAbp;
 
 [Application]
 public class MainApplication : Application
 {
+
     public MainApplication(IntPtr handle, JniHandleOwnership transer) : base(handle, transer)
     {
     }
 
+    [Obsolete]
     public override void OnCreate()
     {
         base.OnCreate();
 
-        string appToken = "427.83r3299CtMi8H2LdNy4ZxAFr";
-        Core.Configure(this, appToken);
+        // Init ThreeTen lib
+        AndroidThreeTen.Init(this);
 
+        // Configure SDK
+        string appToken = "101.token";
+        ConfigOptions opts = new ConfigOptions.Builder(appToken).SetDeferredLocationTrackingEnabled(true).Build();
+        Core.Configure(this, opts);
+
+        // Configure Pickup Module
         var Pickup = PickupManager.Manager.GetInstance(null) as PickupManager;
         Pickup.Configure(this);
 
